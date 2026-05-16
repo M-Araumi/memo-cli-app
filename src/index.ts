@@ -4,6 +4,7 @@ import type { State } from "./types.js";
 import {addCommand} from "./commands/addCommand.js"
 import { updateCommand } from "./commands/updateCommand.js";
 import { deleteCommand } from "./commands/deleteCommand.js";
+import { displayCommand } from "./commands/displayCommand.js";
 
 type AddMemo = {
     type: "add";
@@ -116,11 +117,13 @@ function executeCommand(state:State,cmd:Command):State {
             //     nextId: state.nextId +1
             // };
         case "display":
-            for (const memo of state.memos) {
-                const updateAT = new Date(memo.updatedDate).toISOString().slice(0, 10);
-                console.log(`${memo.id}. タイトル：${memo.title} 本文：${memo.memoText} 更新日付：${updateAT}`);
-            }
+            displayCommand(state.memos)
             return state;
+            // for (const memo of state.memos) {
+            //     const updateAT = new Date(memo.updatedDate).toISOString().slice(0, 10);
+            //     console.log(`${memo.id}. タイトル：${memo.title} 本文：${memo.memoText} 更新日付：${updateAT}`);
+            // }
+            // return state;
         case "update":
             return updateCommand(state,cmd.input);
             // return {

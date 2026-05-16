@@ -1,5 +1,5 @@
-import { error } from "node:console";
 import { loadState, saveState } from "./storage.js";
+import { addCommand } from "./commands/addCommand.js";
 const argv = process.argv.slice(2);
 const [command, ...rest] = argv;
 let cmd;
@@ -33,6 +33,28 @@ switch (command) {
             }
         };
         break;
+    case "del":
+        if (!rest[0]) {
+            throw new Error("削除するメモのIDを入力してください");
+        }
+        cmd = {
+            type: "del",
+            input: {
+                id: Number(rest[0])
+            }
+        };
+        break;
+    case "search":
+        if (!rest[0]) {
+            throw new Error("検索するキーワードを入力してください");
+        }
+        cmd = {
+            type: "search",
+            input: {
+                keyword: rest[0]
+            }
+        };
+        break;
     default:
         throw new Error("不正コマンド");
         break;
@@ -43,18 +65,19 @@ await saveState(state);
 function executeCommand(state, cmd) {
     switch (cmd.type) {
         case "add":
-            const newMemo = {
-                createdDate: new Date(),
-                id: state.nextId,
-                title: cmd.input.title,
-                memoText: cmd.input.memoText,
-                updatedDate: new Date()
-            };
-            return {
-                ...state,
-                memos: [...state.memos, newMemo],
-                nextId: state.nextId + 1
-            };
+            return addCommand(state, cmd["input"]);
+        // const newMemo: Memo = {
+        //     createdDate: new Date(),
+        //     id: state.nextId,
+        //     title: cmd.input.title,
+        //     memoText: cmd.input.memoText,
+        //     updatedDate: new Date()
+        // }
+        // return{
+        //     ...state,
+        //     memos: [...state.memos, newMemo],
+        //     nextId: state.nextId +1
+        // };
         case "display":
             for (const memo of state.memos) {
                 const updateAT = new Date(memo.updatedDate).toISOString().slice(0, 10);
@@ -76,6 +99,28 @@ function executeCommand(state, cmd) {
                     };
                 })
             };
+        case "del":
+            const searchId = state.memos.find(memo => memo.id === cmd.input.id);
+            if (!searchId) {
+                throw new Error("入力したIDのメモが見つかりません");
+            }
+            return {
+                ...state,
+                memos: state.memos.filter(memo => memo.id !== cmd.input.id)
+            };
+        case "search":
+            let found = false;
+            for (const memo of state.memos) {
+                if (memo.title.includes(cmd.input.keyword) || memo.memoText.includes(cmd.input.keyword)) {
+                    const updateAT = new Date(memo.updatedDate).toISOString().slice(0, 10);
+                    found = true;
+                    console.log(`${memo.id}. タイトル：${memo.title} 本文：${memo.memoText} 更新日付：${updateAT}`);
+                }
+            }
+            if (!found) {
+                console.log("検索対象が見つかりません");
+            }
+            return state;
     }
     ;
 }

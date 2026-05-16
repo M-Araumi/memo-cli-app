@@ -1,0 +1,1 @@
+{"version":3,"file":"addCommand.d.ts","sourceRoot":"","sources":["../../src/commands/addCommand.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,KAAK,EAAE,MAAM,aAAa,CAAC;AACzC,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,aAAa,CAAC;AAE3C,wBAAgB,UAAU,CAAC,KAAK,EAAC,KAAK,EAAC,KAAK,EAAC,OAAO,CAAC,OAAO,CAAC;;;EAE5D"}

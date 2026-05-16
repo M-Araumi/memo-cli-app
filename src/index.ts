@@ -1,10 +1,10 @@
 import { loadState, saveState } from "./storage.js";
-import type { Memo } from "./types.js";
 import type { State } from "./types.js";
 import {addCommand} from "./commands/addCommand.js"
 import { updateCommand } from "./commands/updateCommand.js";
 import { deleteCommand } from "./commands/deleteCommand.js";
 import { displayCommand } from "./commands/displayCommand.js";
+import { searchCommand } from "./commands/searchMemo.js";
 
 type AddMemo = {
     type: "add";
@@ -151,18 +151,20 @@ function executeCommand(state:State,cmd:Command):State {
             //     memos: state.memos.filter(memo => memo.id !== cmd.input.id)
             // }
         case "search":
-            let found = false;
-            for (const memo of state.memos) {
-                if(memo.title.includes(cmd.input.keyword) || memo.memoText.includes(cmd.input.keyword)){
-                    const updateAT = new Date(memo.updatedDate).toISOString().slice(0, 10);
-                    found = true;
-                    console.log(`${memo.id}. タイトル：${memo.title} 本文：${memo.memoText} 更新日付：${updateAT}`);
-                }
-            }
-            if(!found){
-                console.log("検索対象が見つかりません");
-            }
+            searchCommand(state.memos,cmd.input);
             return state;
+            // let found = false;
+            // for (const memo of state.memos) {
+            //     if(memo.title.includes(cmd.input.keyword) || memo.memoText.includes(cmd.input.keyword)){
+            //         const updateAT = new Date(memo.updatedDate).toISOString().slice(0, 10);
+            //         found = true;
+            //         console.log(`${memo.id}. タイトル：${memo.title} 本文：${memo.memoText} 更新日付：${updateAT}`);
+            //     }
+            // }
+            // if(!found){
+            //     console.log("検索対象が見つかりません");
+            // }
+            // return state;
     };
 };
 function validateUpdate(input: {

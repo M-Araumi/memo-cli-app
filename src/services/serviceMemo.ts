@@ -1,4 +1,4 @@
-import type { State,Memo,AddMemo,UpdateMemo, DeleteMemo } from "../types.js";
+import type { State, Memo, AddMemo, UpdateMemo, DeleteMemo, SearchMemo } from "../types.js";
 
 export function addMemoService(state:State,input:AddMemo["input"]){
     const newMemo: Memo = {
@@ -45,4 +45,7 @@ export function deleteMemoService(state:State,input:DeleteMemo["input"]){
         ...state,
         memos: state.memos.filter(memo => memo.id !== input.id)
     }
+}
+export function searchMemoService(memos:Memo[],input:SearchMemo["input"]){
+    return memos.filter(memos => memos.title.includes(input.keyword) || memos.memoText.includes(input.keyword))
 }

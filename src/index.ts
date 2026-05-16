@@ -3,6 +3,8 @@ import type { Memo } from "./types.js";
 import type { State } from "./types.js";
 import {addCommand} from "./commands/addCommand.js"
 import { updateCommand } from "./commands/updateCommand.js";
+import { deleteCommand } from "./commands/deleteCommand.js";
+
 type AddMemo = {
     type: "add";
     input: {
@@ -136,14 +138,15 @@ function executeCommand(state:State,cmd:Command):State {
             //     })
             // };
         case "del":
-            const searchId = state.memos.find(memo => memo.id === cmd.input.id)
-            if(!searchId){
-                throw new Error("入力したIDのメモが見つかりません");
-            }
-            return {
-                ...state,
-                memos: state.memos.filter(memo => memo.id !== cmd.input.id)
-            }
+            return deleteCommand(state,cmd.input);
+            // const searchId = state.memos.find(memo => memo.id === cmd.input.id)
+            // if(!searchId){
+            //     throw new Error("入力したIDのメモが見つかりません");
+            // }
+            // return {
+            //     ...state,
+            //     memos: state.memos.filter(memo => memo.id !== cmd.input.id)
+            // }
         case "search":
             let found = false;
             for (const memo of state.memos) {

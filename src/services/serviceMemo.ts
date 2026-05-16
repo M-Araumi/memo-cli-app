@@ -1,4 +1,4 @@
-import type { State,Memo,AddMemo,UpdateMemo } from "../types.js";
+import type { State,Memo,AddMemo,UpdateMemo, DeleteMemo } from "../types.js";
 
 export function addMemoService(state:State,input:AddMemo["input"]){
     const newMemo: Memo = {
@@ -35,4 +35,14 @@ export function updateMemoService(state:State,input:UpdateMemo["input"]){
         ...state,
         memos: updateMemos
     };
+}
+export function deleteMemoService(state:State,input:DeleteMemo["input"]){
+    const searchId = state.memos.find(memo => memo.id === input.id)
+    if(!searchId){
+        throw new Error("入力したIDのメモが見つかりません");
+    }
+    return {
+        ...state,
+        memos: state.memos.filter(memo => memo.id !== input.id)
+    }
 }

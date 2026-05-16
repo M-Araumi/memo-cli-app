@@ -1,16 +1,38 @@
-import type { State } from "../types.js";
-import type { Memo} from "../types.js"
-export function addMemo(state:State,title:string,memoText:string){
+import type { State,Memo,AddMemo,UpdateMemo } from "../types.js";
+
+export function addMemoService(state:State,input:AddMemo["input"]){
     const newMemo: Memo = {
         createdDate: new Date(),
         id: state.nextId,
-        title: title,
-        memoText: memoText,
+        title: input.title,
+        memoText: input.memoText,
         updatedDate: new Date()
     }
     return{
         ...state,
         memos: [...state.memos, newMemo],
         nextId: state.nextId +1
+    };
+}
+export function updateMemoService(state:State,input:UpdateMemo["input"]){
+    let found = false;
+    const updateMemos = state.memos.map(memo => {
+        if (memo.id !== input.id) {
+            return memo;
+        }
+        found = true;
+        return {
+            ...memo,
+            title: input.title ?? memo.title,
+            memoText: input.memoText ?? memo.memoText,
+            updatedDate: new Date()
+        };
+    });
+    if (!found) {
+        throw new Error("対象のメモが見つかりません");
+    }
+    return {
+        ...state,
+        memos: updateMemos
     };
 }

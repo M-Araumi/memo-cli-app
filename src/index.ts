@@ -2,6 +2,7 @@ import { loadState, saveState } from "./storage.js";
 import type { Memo } from "./types.js";
 import type { State } from "./types.js";
 import {addCommand} from "./commands/addCommand.js"
+import { updateCommand } from "./commands/updateCommand.js";
 type AddMemo = {
     type: "add";
     input: {
@@ -99,7 +100,7 @@ await saveState(state);
 function executeCommand(state:State,cmd:Command):State {
     switch(cmd.type){
         case "add":
-            return addCommand(state,cmd["input"]);
+            return addCommand(state,cmd.input);
             // const newMemo: Memo = {
             //     createdDate: new Date(),
             //     id: state.nextId,
@@ -119,20 +120,21 @@ function executeCommand(state:State,cmd:Command):State {
             }
             return state;
         case "update":
-            return {
-                ...state,
-                memos: state.memos.map(memo => {
-                    if (memo.id !== cmd.input.id) {
-                        return memo;
-                    }
-                    return {
-                        ...memo,
-                        title: cmd.input.title ?? memo.title,
-                        memoText: cmd.input.memoText ?? memo.memoText,
-                        updatedDate: new Date()
-                    };
-                })
-            };
+            return updateCommand(state,cmd.input);
+            // return {
+            //     ...state,
+            //     memos: state.memos.map(memo => {
+            //         if (memo.id !== cmd.input.id) {
+            //             return memo;
+            //         }
+            //         return {
+            //             ...memo,
+            //             title: cmd.input.title ?? memo.title,
+            //             memoText: cmd.input.memoText ?? memo.memoText,
+            //             updatedDate: new Date()
+            //         };
+            //     })
+            // };
         case "del":
             const searchId = state.memos.find(memo => memo.id === cmd.input.id)
             if(!searchId){

@@ -1,6 +1,7 @@
 import { loadState, saveState } from "./storage.js";
 import type { State } from "./types.js";
-import {addCommand} from "./commands/addCommand.js"
+import { validateUpdate } from "./validators/validateUpdate.js";
+import { addCommand } from "./commands/addCommand.js"
 import { updateCommand } from "./commands/updateCommand.js";
 import { deleteCommand } from "./commands/deleteCommand.js";
 import { displayCommand } from "./commands/displayCommand.js";
@@ -167,18 +168,18 @@ function executeCommand(state:State,cmd:Command):State {
             // return state;
     };
 };
-function validateUpdate(input: {
-    id?: string;
-    title?: string;
-    memoText?: string;
-}) {
-    if (input.id === undefined) {
-        throw new Error("idは必須");
-    }
-    if (!input.title && !input.memoText) {
-        throw new Error("更新内容がありません");
-    }
-};
+// function validateUpdate(input: {
+//     id?: string;
+//     title?: string;
+//     memoText?: string;
+// }) {
+//     if (input.id === undefined) {
+//         throw new Error("idは必須");
+//     }
+//     if (!input.title && !input.memoText) {
+//         throw new Error("更新内容がありません");
+//     }
+// };
 function parseOptions(args: string[]) {
     const result: Record<string, string> = {};
     const optionMap: Record<string, string> = {

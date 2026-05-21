@@ -1,42 +1,13 @@
 import { loadState, saveState } from "./storage.js";
-import type { State } from "./types.js";
+import type { State, AddMemo, DisplayList, UpdateMemo, DeleteMemo, SearchMemo } from "./types.js";
 import { validateUpdate } from "./validators/validateUpdate.js";
 import { addCommand } from "./commands/addCommand.js"
 import { updateCommand } from "./commands/updateCommand.js";
 import { deleteCommand } from "./commands/deleteCommand.js";
 import { displayCommand } from "./commands/displayCommand.js";
 import { searchCommand } from "./commands/searchMemo.js";
+import { parseOptions } from "./utils/parseOptions.js";
 
-type AddMemo = {
-    type: "add";
-    input: {
-        title: string;
-        memoText: string;
-    }
-}
-type DisplayList = {
-    type: "display"
-}
-type UpdateMemo = {
-    type: "update"
-    input: {
-        id: number;
-        title?: string;
-        memoText?: string;
-    }
-}
-type DeleteMemo = {
-    type: "del"
-    input: {
-        id: number;
-    }
-}
-type SearchMemo = {
-    type: "search"
-    input: {
-        keyword: string;
-    }
-}
 type Command = AddMemo | DisplayList | UpdateMemo | DeleteMemo | SearchMemo ;
 const argv = process.argv.slice(2);
 const [command, ...rest] = argv;
@@ -180,32 +151,32 @@ function executeCommand(state:State,cmd:Command):State {
 //         throw new Error("更新内容がありません");
 //     }
 // };
-function parseOptions(args: string[]) {
-    const result: Record<string, string> = {};
-    const optionMap: Record<string, string> = {
-        "--title": "title",
-        "-t": "title",
-        "--memoText": "memoText",
-        "-m": "memoText",
-        "--id": "id",
-        "-i": "id"
-    };
-    for (let i = 0; i < args.length; i++) {
-        const arg = args[i];
-        if (arg === undefined) {
-            continue;
-        }
-        if (optionMap[arg]) {
-            const key = optionMap[arg];
-            const value = args[i + 1];
-            if (!value || value.startsWith("-")) {
-                throw new Error(`${arg} に値が指定されていません`);
-            }
-            result[key] = value;
-            i++;
-        } else {
-            throw new Error(`不明なオプション: ${arg}`);
-        }
-    }
-    return result;
-};
+// function parseOptions(args: string[]) {
+//     const result: Record<string, string> = {};
+//     const optionMap: Record<string, string> = {
+//         "--title": "title",
+//         "-t": "title",
+//         "--memoText": "memoText",
+//         "-m": "memoText",
+//         "--id": "id",
+//         "-i": "id"
+//     };
+//     for (let i = 0; i < args.length; i++) {
+//         const arg = args[i];
+//         if (arg === undefined) {
+//             continue;
+//         }
+//         if (optionMap[arg]) {
+//             const key = optionMap[arg];
+//             const value = args[i + 1];
+//             if (!value || value.startsWith("-")) {
+//                 throw new Error(`${arg} に値が指定されていません`);
+//             }
+//             result[key] = value;
+//             i++;
+//         } else {
+//             throw new Error(`不明なオプション: ${arg}`);
+//         }
+//     }
+//     return result;
+// };

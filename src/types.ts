@@ -39,3 +39,4 @@ export type SearchMemo = {
         keyword: string;
     }
 }
+export type Command = AddMemo | DisplayList | UpdateMemo | DeleteMemo | SearchMemo ;

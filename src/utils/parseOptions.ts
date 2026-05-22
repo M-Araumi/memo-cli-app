@@ -1,14 +1,8 @@
-export function parseOptions(args: string[]) {
-    const result: Record<string, string> = {};
-    
-    const optionMap: Record<string, string> = {
-        "--title": "title",
-        "-t": "title",
-        "--memoText": "memoText",
-        "-m": "memoText",
-        "--id": "id",
-        "-i": "id"
-    };
+export function parseOptions<T extends string>(
+    args: string[],
+    optionMap: Record<string,T>
+) {
+    const result: Partial<Record<T,string>> = {};
     
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];

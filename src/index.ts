@@ -1,12 +1,13 @@
 import { loadState, saveState } from "./storage.js";
 import type { State, AddMemo, DisplayList, UpdateMemo, DeleteMemo, SearchMemo } from "./types.js";
 import { validateUpdate } from "./validators/validateUpdate.js";
+import { parseOptions } from "./utils/parseOptions.js";
+import { updateOptionMap } from "./constants/optionMaps.js";
 import { addCommand } from "./commands/addCommand.js"
 import { updateCommand } from "./commands/updateCommand.js";
 import { deleteCommand } from "./commands/deleteCommand.js";
 import { displayCommand } from "./commands/displayCommand.js";
 import { searchCommand } from "./commands/searchMemo.js";
-import { parseOptions } from "./utils/parseOptions.js";
 
 type Command = AddMemo | DisplayList | UpdateMemo | DeleteMemo | SearchMemo ;
 const argv = process.argv.slice(2);
@@ -32,7 +33,7 @@ switch (command) {
         };
         break;
     case "update":
-        const options = parseOptions(rest);
+        const options = parseOptions(rest, updateOptionMap);
         validateUpdate(options);
         cmd = {
             type: "update",

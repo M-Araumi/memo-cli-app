@@ -5,6 +5,7 @@ import { updateCommand } from "../commands/updateCommand.js";
 import { deleteCommand } from "../commands/deleteCommand.js";
 import { displayCommand } from "../commands/displayCommand.js";
 import { searchCommand } from "../commands/searchMemo.js";
+import { statsCommand } from "../commands/statsCommand.js";
 
 export function executeCommand(state:State,cmd:Command):State {
     switch(cmd.type){
@@ -19,6 +20,9 @@ export function executeCommand(state:State,cmd:Command):State {
             return deleteCommand(state,cmd.input);
         case "search":
             searchCommand(state.memos,cmd.input);
+            return state;
+        case "stats":
+            statsCommand(state);
             return state;
     };
 };

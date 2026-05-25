@@ -39,4 +39,12 @@ export type SearchMemo = {
         keyword: string;
     }
 }
-export type Command = AddMemo | DisplayList | UpdateMemo | DeleteMemo | SearchMemo ;
+export type StatsMemo = {
+    type: "stats"
+}
+export type StatsMemoCount= {
+        totalCount: number;
+        updateCount: number;
+        averageWordCount: number;
+}
+export type Command = AddMemo | DisplayList | UpdateMemo | DeleteMemo | SearchMemo | StatsMemo ;

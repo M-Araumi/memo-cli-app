@@ -53,6 +53,10 @@ export function parseCommand(argv: string[]): Command {
                     keyword: rest[0]
                 }
             };
+        case "stats":
+            return{
+                type : "stats"
+            }
         default:
             throw new Error("不正コマンド");
     }

@@ -3,6 +3,7 @@ import { parseOptions } from "./parseOptions.js";
 import { validateAdd } from "../validators/validateAdd.js";
 import { validateUpdate } from "../validators/validateUpdate.js";
 import { validateDelete } from "../validators/validateDelete.js";
+import { validateSearch } from "../validators/valiSearch.js";
 import { updateOptionMap } from "../constants/optionMaps.js";
 
 export function parseCommand(argv: string[]): Command {
@@ -50,13 +51,15 @@ export function parseCommand(argv: string[]): Command {
                 }
             };
         case "search":
-            if (!rest[0]){
-                throw new Error("検索するキーワードを入力してください");
-            }
+            const searchInput = {
+                keyword: rest[0]
+            };
+            validateSearch(searchInput)
+
             return {
                 type: "search",
                 input: {
-                    keyword: rest[0]
+                    keyword: searchInput.keyword!
                 }
             };
         case "stats":

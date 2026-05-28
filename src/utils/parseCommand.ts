@@ -1,5 +1,6 @@
 import type { Command } from "../types.js";
 import { parseOptions } from "./parseOptions.js";
+import { validateAdd } from "../validators/validateAdd.js";
 import { validateUpdate } from "../validators/validateUpdate.js";
 import { updateOptionMap } from "../constants/optionMaps.js";
 
@@ -8,14 +9,16 @@ export function parseCommand(argv: string[]): Command {
     
     switch (command) {
         case "add":
-            if (!rest[0] || !rest[1]) {
-                throw new Error("titleとmemoTextなし");
-            }
+            const addInput = {
+                title: rest[0],
+                memoText: rest[1]
+            };
+            validateAdd(addInput);
             return {
                 type: "add",
                 input: {
-                    title: rest[0],
-                    memoText: rest[1]
+                    title: addInput.title!,
+                    memoText: addInput.memoText!
                 }
             };
         case "display":

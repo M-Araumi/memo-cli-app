@@ -2,6 +2,7 @@ import type { Command } from "../types.js";
 import { parseOptions } from "./parseOptions.js";
 import { validateAdd } from "../validators/validateAdd.js";
 import { validateUpdate } from "../validators/validateUpdate.js";
+import { validateDelete } from "../validators/validateDelete.js";
 import { updateOptionMap } from "../constants/optionMaps.js";
 
 export function parseCommand(argv: string[]): Command {
@@ -37,13 +38,15 @@ export function parseCommand(argv: string[]): Command {
                 }
             };
         case "del":
-            if (!rest[0]) {
-                throw new Error("削除するメモのIDを入力してください");
-            }
+            const delInput = {
+                id: Number(rest[0])
+            };
+            validateDelete(delInput)
+
             return {
                 type: "del",
                 input: {
-                    id: Number(rest[0])
+                    id: delInput.id
                 }
             };
         case "search":
